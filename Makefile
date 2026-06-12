@@ -8,6 +8,8 @@ APP_NAME := Define
 BUILD_DIR := .build
 BUNDLE_DIR := build/$(APP_NAME).app
 CONFIG := release
+SDK_VERSION := $(shell xcrun --sdk macosx --show-sdk-version)
+MIN_MACOS := 14.0
 
 .PHONY: all app run debug test icon clean
 
@@ -19,6 +21,11 @@ app:
 	rm -rf "$(BUNDLE_DIR)"
 	mkdir -p "$(BUNDLE_DIR)/Contents/MacOS" "$(BUNDLE_DIR)/Contents/Resources"
 	cp "$$(swift build -c $(CONFIG) --show-bin-path)/$(APP_NAME)" "$(BUNDLE_DIR)/Contents/MacOS/$(APP_NAME)"
+	# SwiftPM stamps the deployment target as the linked-SDK version, which
+	# makes macOS run the app in legacy-appearance mode (no Liquid Glass).
+	# Re-stamp the real SDK so the system treats it as a modern app.
+	vtool -set-build-version macos $(MIN_MACOS) $(SDK_VERSION) -replace \
+		-output "$(BUNDLE_DIR)/Contents/MacOS/$(APP_NAME)" "$(BUNDLE_DIR)/Contents/MacOS/$(APP_NAME)"
 	cp Support/Info.plist "$(BUNDLE_DIR)/Contents/Info.plist"
 	cp Support/AppIcon.icns "$(BUNDLE_DIR)/Contents/Resources/AppIcon.icns"
 	codesign --force --sign - "$(BUNDLE_DIR)"

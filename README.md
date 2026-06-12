@@ -26,10 +26,16 @@ folders — *Biology*, *French*, *GRE* — and export any folder straight to
 
 ## Install
 
-Build from source (requires Xcode 16+ / macOS 14+):
+**Download:** grab `Define.app.zip` from the
+[latest release](https://github.com/daniel-inderos/Define/releases/latest),
+unzip, and move `Define.app` to `/Applications`. Release builds aren't yet
+notarized, so on first launch right-click the app and choose **Open** (or run
+`xattr -d com.apple.quarantine /Applications/Define.app`).
+
+**Or build from source** (requires Xcode 16+ / macOS 14+):
 
 ```sh
-git clone <repo-url> && cd Define
+git clone https://github.com/daniel-inderos/Define.git && cd Define
 make app        # builds and assembles ./build/Define.app
 make run        # builds and launches it
 ```

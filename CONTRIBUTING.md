@@ -6,7 +6,7 @@ third-party dependencies, AppKit shell + SwiftUI views.
 ## Getting started
 
 ```sh
-git clone <repo-url> && cd Define
+git clone https://github.com/daniel-inderos/Define.git && cd Define
 swift build
 swift test
 make run        # build Define.app and launch it

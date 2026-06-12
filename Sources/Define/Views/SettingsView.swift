@@ -49,7 +49,7 @@ struct SettingsView: View {
 
             Section {
                 LabeledContent("Version", value: Self.versionString)
-                Link("Define on GitHub", destination: URL(string: "https://github.com/define-app/define")!)
+                Link("Define on GitHub", destination: URL(string: "https://github.com/daniel-inderos/Define")!)
             }
 
             Section {

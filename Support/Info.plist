@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>Define</string>
 	<key>CFBundleIdentifier</key>
-	<string>dev.define.Define</string>
+	<string>io.github.daniel-inderos.Define</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>

@@ -1,6 +1,10 @@
-# Define
+<p align="center">
+  <img src="docs/icon.png" width="128" alt="Define app icon">
+</p>
 
-**The built-in macOS dictionary, but it remembers.**
+<h1 align="center">Define</h1>
+
+<p align="center"><strong>The built-in macOS dictionary, but it remembers.</strong></p>
 
 Define is a tiny open-source menu bar app. Select a word in any app, press
 **⌃⌘D** (the same shortcut as the system dictionary), and a popover shows the

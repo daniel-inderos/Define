@@ -9,7 +9,7 @@ BUILD_DIR := .build
 BUNDLE_DIR := build/$(APP_NAME).app
 CONFIG := release
 
-.PHONY: all app run debug test clean
+.PHONY: all app run debug test icon clean
 
 all: app
 
@@ -20,6 +20,7 @@ app:
 	mkdir -p "$(BUNDLE_DIR)/Contents/MacOS" "$(BUNDLE_DIR)/Contents/Resources"
 	cp "$$(swift build -c $(CONFIG) --show-bin-path)/$(APP_NAME)" "$(BUNDLE_DIR)/Contents/MacOS/$(APP_NAME)"
 	cp Support/Info.plist "$(BUNDLE_DIR)/Contents/Info.plist"
+	cp Support/AppIcon.icns "$(BUNDLE_DIR)/Contents/Resources/AppIcon.icns"
 	codesign --force --sign - "$(BUNDLE_DIR)"
 	@echo "Built $(BUNDLE_DIR)"
 
@@ -34,6 +35,10 @@ debug:
 
 test:
 	swift test
+
+# Regenerate Support/AppIcon.icns and docs/icon.png from source
+icon:
+	swift Scripts/generate-icon.swift
 
 clean:
 	swift package clean

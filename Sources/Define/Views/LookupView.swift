@@ -165,6 +165,6 @@ struct FolderChip: View {
         }
         .padding(.horizontal, 7)
         .padding(.vertical, 3)
-        .background(.quaternary, in: Capsule())
+        .glassChipBackground()
     }
 }

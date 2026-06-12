@@ -56,6 +56,9 @@ struct HistoryView: View {
                 .buttonStyle(.plain)
             }
         }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 6)
+        .glassFieldBackground()
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
     }

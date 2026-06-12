@@ -11,8 +11,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Prefer an Xcode whose SDK has the Liquid Glass APIs; the code
+      # compiles either way thanks to compiler-version guards.
       - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_16.4.app
+        run: |
+          for xc in /Applications/Xcode_26.1.app /Applications/Xcode_26.0.app /Applications/Xcode_16.4.app; do
+            if [ -d "$xc" ]; then sudo xcode-select -s "$xc"; break; fi
+          done
+          xcodebuild -version
 
       - name: Build
         run: swift build

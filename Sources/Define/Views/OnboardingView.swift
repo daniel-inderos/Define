@@ -21,6 +21,7 @@ struct OnboardingView: View {
                 AccessibilityPermissionWatcher.promptForAccess()
                 AccessibilityPermissionWatcher.openSystemSettings()
             }
+            .glassProminentButtonStyle()
             .keyboardShortcut(.defaultAction)
             Spacer()
         }

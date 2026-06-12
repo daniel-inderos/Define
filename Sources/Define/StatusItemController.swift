@@ -4,10 +4,11 @@ import SwiftUI
 
 /// Owns the menu bar item and the popover that anchors to it.
 @MainActor
-final class StatusItemController {
+final class StatusItemController: NSObject, NSPopoverDelegate {
     private let appState: AppState
     private let statusItem: NSStatusItem
     private let popover: NSPopover
+    private var clickAwayMonitor: Any?
 
     init(appState: AppState, modelContainer: ModelContainer) {
         self.appState = appState
@@ -29,6 +30,9 @@ final class StatusItemController {
                 .environmentObject(appState)
                 .modelContainer(modelContainer)
         )
+
+        super.init()
+        popover.delegate = self
 
         statusItem.button?.target = self
         statusItem.button?.action = #selector(statusItemClicked)
@@ -67,5 +71,37 @@ final class StatusItemController {
         // Activate so the popover can take keyboard focus (search field,
         // folder name field) immediately.
         NSApp.activate(ignoringOtherApps: true)
+        installClickAwayMonitor()
+    }
+
+    // MARK: - Click-away dismissal
+
+    /// `.transient` alone doesn't reliably close a status item popover when
+    /// the click lands in another app (we've activated ourselves to take
+    /// keyboard focus). Global monitors only see events delivered to *other*
+    /// apps, so this closes on any outside click without interfering with
+    /// clicks inside the popover.
+    private func installClickAwayMonitor() {
+        guard clickAwayMonitor == nil else { return }
+        clickAwayMonitor = NSEvent.addGlobalMonitorForEvents(
+            matching: [.leftMouseDown, .rightMouseDown, .otherMouseDown]
+        ) { [weak self] _ in
+            Task { @MainActor [weak self] in
+                self?.popover.performClose(nil)
+            }
+        }
+    }
+
+    private func removeClickAwayMonitor() {
+        if let clickAwayMonitor {
+            NSEvent.removeMonitor(clickAwayMonitor)
+        }
+        clickAwayMonitor = nil
+    }
+
+    nonisolated func popoverDidClose(_ notification: Notification) {
+        Task { @MainActor in
+            self.removeClickAwayMonitor()
+        }
     }
 }

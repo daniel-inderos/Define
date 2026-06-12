@@ -11,6 +11,19 @@ CONFIG := release
 SDK_VERSION := $(shell xcrun --sdk macosx --show-sdk-version)
 MIN_MACOS := 14.0
 
+# macOS ties Accessibility (TCC) grants to the app's code signature. An
+# ad-hoc signature changes on every rebuild, so the grant goes stale and
+# the app re-prompts. Prefer a stable identity when the machine has one:
+# Developer ID first, then Apple Development; fall back to ad-hoc ("-").
+# Override with: make app CODESIGN_IDENTITY=<hash-or-name>
+CODESIGN_IDENTITY ?= $(shell security find-identity -v -p codesigning 2>/dev/null | awk '/Developer ID Application/ {print $$2; exit}')
+ifeq ($(strip $(CODESIGN_IDENTITY)),)
+CODESIGN_IDENTITY := $(shell security find-identity -v -p codesigning 2>/dev/null | awk '/Apple Development/ {print $$2; exit}')
+endif
+ifeq ($(strip $(CODESIGN_IDENTITY)),)
+CODESIGN_IDENTITY := -
+endif
+
 .PHONY: all app run debug test icon clean
 
 all: app
@@ -28,8 +41,8 @@ app:
 		-output "$(BUNDLE_DIR)/Contents/MacOS/$(APP_NAME)" "$(BUNDLE_DIR)/Contents/MacOS/$(APP_NAME)"
 	cp Support/Info.plist "$(BUNDLE_DIR)/Contents/Info.plist"
 	cp Support/AppIcon.icns "$(BUNDLE_DIR)/Contents/Resources/AppIcon.icns"
-	codesign --force --sign - "$(BUNDLE_DIR)"
-	@echo "Built $(BUNDLE_DIR)"
+	codesign --force --sign "$(CODESIGN_IDENTITY)" "$(BUNDLE_DIR)"
+	@echo "Built $(BUNDLE_DIR) (signed: $(CODESIGN_IDENTITY))"
 
 # Build the bundle and launch it
 run: app

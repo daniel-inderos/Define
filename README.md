@@ -83,10 +83,14 @@ swift test      # run the test suite
 make app        # assemble Define.app into ./build
 ```
 
-Or open `Package.swift` in Xcode. Note that when running un-bundled
-(`swift run` or Xcode), macOS tracks Accessibility permission per-binary, so
-you may be re-prompted after rebuilds; the bundled `make app` build has a
-stable identity.
+Or open `Package.swift` in Xcode.
+
+A note on Accessibility permission during development: macOS ties the grant
+to the app's code signature. `make app` automatically signs with your
+Developer ID or Apple Development certificate when you have one, so the
+grant survives rebuilds. Without a certificate it falls back to ad-hoc
+signing, which changes every build — you'll need to remove and re-add
+Define in System Settings → Accessibility after rebuilding.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the lay of the land.
 

@@ -78,7 +78,7 @@ struct FoldersView: View {
                 } label: {
                     Label("New Folder", systemImage: "plus")
                 }
-                .buttonStyle(.borderless)
+                .glassButtonStyle()
                 Spacer()
             }
             .padding(10)
@@ -103,7 +103,7 @@ struct FolderDetailView: View {
                 Button(action: onBack) {
                     Label("Folders", systemImage: "chevron.left")
                 }
-                .buttonStyle(.borderless)
+                .glassButtonStyle()
                 Spacer()
                 Text(folder.name)
                     .font(.headline)

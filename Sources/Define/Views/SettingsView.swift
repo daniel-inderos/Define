@@ -59,6 +59,8 @@ struct SettingsView: View {
             }
         }
         .formStyle(.grouped)
+        // Let the popover's material show through behind the section cards.
+        .scrollContentBackground(.hidden)
     }
 
     private func updateLaunchAtLogin(_ enabled: Bool) {

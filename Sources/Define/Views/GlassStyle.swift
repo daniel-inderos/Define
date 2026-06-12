@@ -35,6 +35,20 @@ extension View {
         #endif
     }
 
+    /// Secondary action button: glass on macOS 26+, borderless earlier.
+    @ViewBuilder
+    func glassButtonStyle() -> some View {
+        #if compiler(>=6.2)
+        if #available(macOS 26.0, *) {
+            self.buttonStyle(.glass)
+        } else {
+            self.buttonStyle(.borderless)
+        }
+        #else
+        self.buttonStyle(.borderless)
+        #endif
+    }
+
     /// Rounded field container (e.g. the history search field).
     @ViewBuilder
     func glassFieldBackground() -> some View {
